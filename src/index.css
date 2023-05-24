@@ -31,3 +31,12 @@ html {
 ::-webkit-scrollbar-thumb:hover {
     @apply bg-ink-white;
 }
+
+.spacer {
+    width: 100%;
+    aspect-ratio: 1440 / 810;
+    background-size: cover;
+
+    background-repeat: no-repeat;
+    background-position: bottom;
+}
