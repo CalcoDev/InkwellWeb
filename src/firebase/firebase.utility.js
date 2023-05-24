@@ -6,6 +6,7 @@ import {
     getAuth,
     GoogleAuthProvider,
     signInWithPopup,
+    signInWithEmailAndPassword as siweap,
     createUserWithEmailAndPassword,
     fetchSignInMethodsForEmail,
 } from "firebase/auth";
@@ -43,6 +44,41 @@ export const signInWithGoogle = async () => {
         return {
             succeded: false,
             errorCode: "Error signing in with Google. Please try again!",
+        };
+    }
+};
+
+export const signInWithEmailAndPassword = async (email, password) => {
+    try {
+        const li = await fetchSignInMethodsForEmail(auth, email);
+        if (!li.includes("password") && li.length > 0)
+            return {
+                succeded: false,
+                errorCode:
+                    "Email already in use, maybe in the form of another provider.",
+            };
+
+        const { user } = await siweap(auth, email, password);
+
+        try {
+            const userData = (
+                await getDoc(doc(db, `users/${user.uid}`))
+            ).data();
+            return {
+                succeded: true,
+                user: userData,
+            };
+        } catch (error) {
+            return {
+                succeded: false,
+                errorCode:
+                    "Error reading user data from database. Please try again!",
+            };
+        }
+    } catch (error) {
+        return {
+            succeded: false,
+            errorCode: error.message,
         };
     }
 };

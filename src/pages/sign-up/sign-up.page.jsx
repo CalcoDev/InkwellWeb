@@ -15,9 +15,9 @@ const SignUp = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [verifyPassword, setVerifyPassword] = useState("");
+
     const [errorCode, setErrorCode] = useState(null);
     const [signedIn, setSignedIn] = useState(false);
-
     const [_, setGlobalUserState] = useRecoilState(userState);
     const navigate = useNavigate();
 
