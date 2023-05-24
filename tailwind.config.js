@@ -13,6 +13,8 @@ export default {
                 "ink-light-blue": "$BFD8FB",
                 "ink-dark-light-blue": "#778CA9",
 
+                "ink-red": "#E53838",
+
                 "ink-transparent": "transparent",
             },
             fontFamily: {

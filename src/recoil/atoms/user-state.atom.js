@@ -5,9 +5,9 @@ const userState = atom({
     default: {
         connected: false,
 
-        id: "-1",
-        name: "user_debug",
-        profilePicture: "",
+        uid: "-1",
+        displayName: "user_debug",
+        photoURL: "",
     },
 });
 
