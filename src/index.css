@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* width */
+::-webkit-scrollbar {
+    @apply w-1;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    @apply bg-cfm-dark-grey;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #555;
+    @apply rounded-xl;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    @apply bg-cfm-white;
+}
