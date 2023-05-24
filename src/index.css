@@ -18,7 +18,7 @@ html {
 
 /* Track */
 ::-webkit-scrollbar-track {
-    @apply bg-cfm-dark-grey;
+    @apply bg-ink-dark-grey;
 }
 
 /* Handle */
@@ -29,5 +29,5 @@ html {
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-    @apply bg-cfm-white;
+    @apply bg-ink-white;
 }

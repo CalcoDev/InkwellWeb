@@ -1,5 +1,9 @@
+import { useParams } from "react-router-dom";
+
 const ProjectDashboard = () => {
-    return <></>;
+    const { projectId } = useParams();
+
+    return <div>ID: {projectId}</div>;
 };
 
 export default ProjectDashboard;

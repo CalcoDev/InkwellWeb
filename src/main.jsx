@@ -9,15 +9,14 @@ import ProjectDashboard from "./pages/project-dashboard/project-dashboard.page";
 import ProjectsSelect from "./pages/projects-select/projects-select.page";
 
 const paths = [
-    { path: "/", component: Home },
-    { path: "/sign-in", component: SignIn },
-    { path: "/sign-up", component: SignUp },
-    { path: "/projects", component: ProjectsSelect },
-    { path: "/project/:id", component: ProjectDashboard },
+    { path: "/", element: <Home /> },
+    { path: "/sign-in", element: <SignIn /> },
+    { path: "/sign-up", element: <SignUp /> },
+    { path: "/projects", element: <ProjectsSelect /> },
+    { path: "/project/:projectId", element: <ProjectDashboard /> },
 ];
 
 const router = createBrowserRouter(paths);
-
 ReactDOM.createRoot(document.getElementById("root")).render(
     <>
         <RouterProvider router={router} />
