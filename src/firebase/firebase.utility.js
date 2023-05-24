@@ -193,7 +193,10 @@ export const getUserProjects = async (userUID) => {
 
     const projects = projectRefs.map(async (project) => {
         const projectSnapshot = await getDoc(project);
-        return projectSnapshot.data();
+        return {
+            uid: projectSnapshot.id,
+            ...projectSnapshot.data(),
+        };
     });
 
     return {

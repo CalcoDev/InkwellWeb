@@ -12,9 +12,13 @@ import ProjectCard from "../../components/project-card/project-card.component";
 import InkModal from "../../components/ink-modal/ink-modal.component";
 import InkInput from "../../components/ink-input/ink-input.component";
 import InkButton from "../../components/ink-button/ink-button.component";
+import { loadProjectFromFile } from "../../misc/json.utils";
+import projectState from "../../recoil/atoms/project-state.atom";
 
 const ProjectsSelect = () => {
     const [user] = useRecoilState(userState);
+    const [project, setProject] = useRecoilState(projectState);
+
     const [projects, setProjects] = useState(null);
     const navigate = useNavigate();
 
@@ -23,10 +27,15 @@ const ProjectsSelect = () => {
     const [description, setDescription] = useState("");
     const [errorCode, setErrorCode] = useState(null);
 
+    const [isFileModalHidden, setFileModalHidden] = useState(true);
+    const [file, setFile] = useState(null);
+    const [fileError, setFileError] = useState(null);
+
     const handleCreateProject = async () => {
         const res = await createProject(user.uid, name, description);
         if (!res.succeded) {
             console.log(res.errorCode);
+            setErrorCode(res.errorCode);
             return;
         }
 
@@ -38,12 +47,43 @@ const ProjectsSelect = () => {
         setProjects([...projects, res.project]);
     };
 
-    useEffect(() => {
-        // if (!user.connected) {
-        //     navigate("/sign-in");
-        // }
+    const handleLoadLocalProject = async () => {
+        const res = await loadProjectFromFile(file);
 
-        // TODO(calco): Show this on page.
+        if (!res.succeded) {
+            setFileError(res.errorCode);
+            return;
+        }
+
+        setProject({
+            local: true,
+            uid: null,
+            ...res.project,
+        });
+
+        setFileModalHidden(true);
+        setFile(null);
+
+        // TODO(calco): PRODUCTION UNCOMMENT
+        navigate(`/project/local`);
+    };
+
+    const handleLoadProject = (projectIdx) => {
+        setProject({
+            local: false,
+            uid: projects[projectIdx].uid,
+            ...projects[projectIdx],
+        });
+
+        // TODO(calco): PRODUCTION UNCOMMENT
+        navigate(`/project/${projects[projectIdx].uid}`);
+    };
+
+    useEffect(() => {
+        if (!user.connected) {
+            navigate("/sign-in");
+        }
+
         getUserProjects(user.uid).then(({ succeded, errorCode, projects }) => {
             if (!succeded) {
                 setErrorCode(errorCode);
@@ -60,10 +100,15 @@ const ProjectsSelect = () => {
             <div className="z-0 absolute h-screen spacer bg-[url('waves/projects_wave_bottom.svg')]"></div>
 
             <InkModal
-                title="Create Project"
+                title="Create project"
                 className="max-w-[45vw]"
                 hidden={isModalHidden}
                 setHidden={setModalHidden}
+                onClose={() => {
+                    setErrorCode(null);
+                    setName("");
+                    setDescription("");
+                }}
             >
                 <div className="flex flex-col justify-between h-full w-full items-center transition duration-300 ease-in-out sm:p-8 md:p-16 lg:p-32">
                     <div className="w-1/2 h-2/3 flex flex-col">
@@ -103,6 +148,42 @@ const ProjectsSelect = () => {
                 </div>
             </InkModal>
 
+            <InkModal
+                title="Load local project"
+                className="max-w-[45vw]"
+                hidden={isFileModalHidden}
+                setHidden={setFileModalHidden}
+                onClose={() => {
+                    setFileError(null);
+                    setFile(null);
+                }}
+            >
+                <div
+                    className="
+                        flex flex-col justify-between h-full w-full items-center 
+                        transition duration-300 ease-in-out sm:p-8 md:p-16 lg:p-32
+                    "
+                >
+                    <input
+                        type="file"
+                        onChange={(e) => setFile(e.target.files[0])}
+                    />
+
+                    {fileError && (
+                        <p className="text-ink-red text-xs text-center mb-4">
+                            {fileError}
+                        </p>
+                    )}
+
+                    <InkButton
+                        onClick={handleLoadLocalProject}
+                        lightTheme={false}
+                    >
+                        Load project
+                    </InkButton>
+                </div>
+            </InkModal>
+
             <Navigation className="z-0" />
 
             <div className="relative z-20 bg-ink-transparent pt-[15vh] h-full w-[60%] mx-auto">
@@ -129,7 +210,14 @@ const ProjectsSelect = () => {
                         </h1>
                     </div>
 
-                    <div className="active:scale-90 hover:cursor-pointer hover:scale-110 transition-all ease-in-out duration-300 rounded-md bg-ink-blue flex flex-col justify-center items-center p-4 min-h-[8rem] h-[30vh] max-h-[16rem]">
+                    <div
+                        className="
+                            active:scale-90 hover:cursor-pointer hover:scale-110 transition-all ease-in-out 
+                            duration-300 rounded-md bg-ink-blue flex flex-col justify-center
+                            items-center p-4 min-h-[8rem] h-[30vh] max-h-[16rem]
+                        "
+                        onClick={() => setFileModalHidden(false)}
+                    >
                         <img
                             className="mb-4"
                             src="icons/plus.svg"
@@ -152,6 +240,10 @@ const ProjectsSelect = () => {
                                         createdAt.seconds * 1000
                                     ).toLocaleDateString()}
                                     key={i}
+                                    onClick={() => {
+                                        handleLoadProject(i);
+                                        console.log("clicked");
+                                    }}
                                 />
                             )
                         )}

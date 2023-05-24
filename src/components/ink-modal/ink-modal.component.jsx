@@ -4,6 +4,7 @@ const InkModal = ({
     children,
     hidden,
     setHidden,
+    onClose,
     title,
 }) => {
     return (
@@ -25,7 +26,10 @@ const InkModal = ({
                         src="icons/close_modal.png"
                         alt="Close"
                         className="w-8 h-8 cursor-pointer"
-                        onClick={() => setHidden(true)}
+                        onClick={() => {
+                            setHidden(true);
+                            onClose && onClose();
+                        }}
                     />
                 </div>
 

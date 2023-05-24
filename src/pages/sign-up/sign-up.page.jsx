@@ -21,7 +21,6 @@ const SignUp = () => {
     const [_, setGlobalUserState] = useRecoilState(userState);
     const navigate = useNavigate();
 
-    // TODO(calco): Error handling on page, especially passworda!
     const handleSubmit = async () => {
         if (password !== verifyPassword) {
             alert("Passwords do not match");
