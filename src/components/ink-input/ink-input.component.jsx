@@ -1,4 +1,4 @@
-const InkInput = ({ className, value, onChange, type, label }) => {
+const InkInput = ({ className, value, onChange, type, label, lightTheme }) => {
     return (
         <div className={`${className} relative w-full`}>
             <label
@@ -10,7 +10,7 @@ const InkInput = ({ className, value, onChange, type, label }) => {
                     italic
             
                     left-2
-                    ${value.length > 0 ? "-top-2 text-xxs" : "top-1"}
+                    ${value.length > 0 ? "-top-2 text-xxs" : "top-[0.65rem]"}
                 `}
             >
                 {label}
@@ -18,30 +18,35 @@ const InkInput = ({ className, value, onChange, type, label }) => {
 
             {type === "textarea" ? (
                 <textarea
-                    className="
-                w-full h-full bg-ink-transparent 
-                text-ink-light-grey
-                font-ink-catamaran text-sm 
-                py-1 px-2 
-                border-b-[1px] border-ink-lighter-grey 
-                transition-all duration-300 transition-ease-in-out
-                focus:outline-none focus:border-ink-white
-            "
+                    className={`
+                    w-full h-full bg-ink-transparent 
+                    font-ink-catamaran text-sm 
+                    py-2 px-2 
+                    border-b-[1px]
+                    transition-all duration-300 transition-ease-in-out
+                    focus:outline-none ${
+                        lightTheme === true || lightTheme === undefined
+                            ? "text-ink-white border-ink-lighter-grey focus:border-ink-white"
+                            : "text-ink-dark-grey border-ink-dark-grey focus:ink-dark-grey"
+                    }
+                `}
                     value={value}
                     onChange={onChange}
                 />
             ) : (
                 <input
                     type={type}
-                    className="
+                    className={`
                         w-full h-full bg-ink-transparent 
-                        text-ink-white
                         font-ink-catamaran text-sm 
-                        py-1 px-2 
-                        border-b-[1px] border-ink-lighter-grey 
+                        py-2 px-2 border-b-[1px] 
                         transition-all duration-300 transition-ease-in-out
-                        focus:outline-none focus:border-ink-white
-                    "
+                        focus:outline-none ${
+                            lightTheme === true || lightTheme === undefined
+                                ? "text-ink-white border-ink-lighter-grey focus:border-ink-white"
+                                : "text-ink-dark-grey border-ink-dark-grey focus:ink-dark-grey"
+                        }
+                    `}
                     value={value}
                     onChange={onChange}
                 />

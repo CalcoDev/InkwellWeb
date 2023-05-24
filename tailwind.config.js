@@ -10,7 +10,7 @@ export default {
                 "ink-white": "#FFFFFF",
 
                 "ink-blue": "#2474E4",
-                "ink-light-blue": "$BFD8FB",
+                "ink-light-blue": "#BFD8FB",
                 "ink-dark-light-blue": "#778CA9",
 
                 "ink-red": "#E53838",

@@ -1,7 +1,17 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 
-import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
+import {
+    Timestamp,
+    addDoc,
+    arrayUnion,
+    collection,
+    doc,
+    getDoc,
+    getFirestore,
+    setDoc,
+    updateDoc,
+} from "firebase/firestore";
 import {
     getAuth,
     GoogleAuthProvider,
@@ -120,6 +130,21 @@ export const signUpWithEmailAndPassword = async (
 // Firestore DB
 const db = getFirestore(app);
 
+/*
+USER: uid: string - name
+    displayName: string
+    email: string
+    createdAt: Date
+    photoURL: string
+    projects: [Project]
+
+PROJECT: uid: string - name
+    name: string
+    description: string
+    createdAt: Date
+    members: [User]
+*/
+
 const addUserToDatabase = async (authObject, otherProps) => {
     // This will fire on sign out as well:
     if (!authObject) return;
@@ -139,6 +164,7 @@ const addUserToDatabase = async (authObject, otherProps) => {
                 displayName: displayName || email.split("@")[0],
                 email,
                 createdAt,
+                projects: [],
                 ...otherProps,
             });
         } catch (error) {
@@ -149,4 +175,58 @@ const addUserToDatabase = async (authObject, otherProps) => {
     }
 
     return (await getDoc(userRef)).data();
+};
+
+export const getUserProjects = async (userUID) => {
+    const userRef = doc(db, `users/${userUID}`);
+    const userSnapshot = await getDoc(userRef);
+
+    if (!userSnapshot.exists()) {
+        return {
+            succeded: false,
+            errorCode: "Could not fetch user from database.",
+        };
+    }
+
+    const user = userSnapshot.data();
+    const projectRefs = user.projects;
+
+    const projects = projectRefs.map(async (project) => {
+        const projectSnapshot = await getDoc(project);
+        return projectSnapshot.data();
+    });
+
+    return {
+        succeded: true,
+        projects: await Promise.all(projects),
+    };
+};
+
+export const createProject = async (userUID, name, description) => {
+    const projectsRef = collection(db, "projects");
+    const userRef = doc(db, `users/${userUID}`);
+
+    try {
+        const project = await addDoc(projectsRef, {
+            name,
+            description,
+            createdAt: Timestamp.now(),
+            members: [userRef],
+        });
+
+        updateDoc(userRef, {
+            projects: arrayUnion(project),
+        });
+
+        return {
+            succeded: true,
+            project: (await getDoc(project)).data(),
+        };
+    } catch (error) {
+        return {
+            succeded: false,
+            errorCode:
+                "Error creating project. Please try again or contact support.",
+        };
+    }
 };

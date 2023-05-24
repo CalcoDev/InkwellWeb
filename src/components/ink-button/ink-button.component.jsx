@@ -1,21 +1,25 @@
-const InkButton = ({ className, onClick, children }) => {
+const InkButton = ({ className, onClick, children, lightTheme }) => {
     return (
         <button
             className={`
                 ${className || ""}
                 transition duration-300 ease-in-out
                 bg-ink-transparent 
-                border border-ink-white
-                px-4 py-2 rounded
+                border px-4 py-2 rounded
                 
                 font-ink-fira font-extralight 
-                text-ink-white text-center text-sm
+                text-center text-sm
                 tracking-ink-3 indent-ink-3
                 
-                hover:bg-ink-white hover:text-ink-light-grey
                 hover:scale-110
                 
                 active:scale-90
+                
+                ${
+                    lightTheme === true || lightTheme === undefined
+                        ? "border-ink-white text-ink-white hover:bg-ink-white hover:text-ink-dark-grey"
+                        : "border-ink-dark-grey text-ink-dark-grey hover:bg-ink-dark-grey hover:text-ink-white"
+                }
             `}
             onClick={onClick}
         >

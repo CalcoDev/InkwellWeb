@@ -72,6 +72,7 @@ const SignUp = () => {
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
+                lightTheme={true}
             />
             <InkInput
                 className="mb-8"
@@ -79,6 +80,7 @@ const SignUp = () => {
                 type="text"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                lightTheme={true}
             />
             <InkInput
                 className="mb-8"
@@ -86,6 +88,7 @@ const SignUp = () => {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                lightTheme={true}
             />
             <InkInput
                 className={errorCode !== null && "mb-8"}
@@ -93,6 +96,7 @@ const SignUp = () => {
                 type="password"
                 value={verifyPassword}
                 onChange={(e) => setVerifyPassword(e.target.value)}
+                lightTheme={true}
             />
 
             {errorCode !== null && (
