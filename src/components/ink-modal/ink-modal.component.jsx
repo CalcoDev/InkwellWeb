@@ -9,7 +9,7 @@ const InkModal = ({
 }) => {
     return (
         <div
-            className={`${classNameOuter} ${hidden ? "hidden" : ""}
+            className={`${classNameOuter || ""} ${hidden ? "hidden" : ""}
                 absolute w-screen h-screen top-0 left-0 z-50
                 bg-ink-dark-grey bg-opacity-50 flex justify-center items-center
             `}
@@ -23,7 +23,7 @@ const InkModal = ({
                     </h1>
 
                     <img
-                        src="icons/close_modal.png"
+                        src="/icons/close_modal.png"
                         alt="Close"
                         className="w-8 h-8 cursor-pointer"
                         onClick={() => {

@@ -7,13 +7,14 @@ import {
     getUserProjects,
 } from "../../firebase/firebase.utility";
 import { useNavigate } from "react-router-dom";
-import Navigation from "../../components/navigation/navigation.component";
+import TopNavigation from "../../components/top-navigation/top-navigation.component";
 import ProjectCard from "../../components/project-card/project-card.component";
 import InkModal from "../../components/ink-modal/ink-modal.component";
 import InkInput from "../../components/ink-input/ink-input.component";
 import InkButton from "../../components/ink-button/ink-button.component";
 import { loadProjectFromFile } from "../../misc/json.utils";
 import projectState from "../../recoil/atoms/project-state.atom";
+import { confirmPasswordReset } from "firebase/auth";
 
 const ProjectsSelect = () => {
     const [user] = useRecoilState(userState);
@@ -55,9 +56,14 @@ const ProjectsSelect = () => {
             return;
         }
 
+        const dateNow = new Date(Date.now());
         setProject({
             local: true,
-            uid: null,
+            uid: "local",
+            createdAt: {
+                nanoseconds: dateNow.getTime() / 1000000,
+                seconds: dateNow.getTime() / 1000,
+            },
             ...res.project,
         });
 
@@ -79,19 +85,31 @@ const ProjectsSelect = () => {
         navigate(`/project/${projects[projectIdx].uid}`);
     };
 
+    const reloadProjectList = () => {
+        setTimeout(() => {
+            getUserProjects(user.uid).then(
+                ({ succeded, errorCode, projects }) => {
+                    console.log(succeded, errorCode, projects);
+
+                    if (!succeded) {
+                        setErrorCode(errorCode);
+                        return;
+                    }
+
+                    setProjects(projects);
+                }
+            );
+        }, 2000);
+    };
+
     useEffect(() => {
         if (!user.connected) {
             navigate("/sign-in");
         }
 
-        getUserProjects(user.uid).then(({ succeded, errorCode, projects }) => {
-            if (!succeded) {
-                setErrorCode(errorCode);
-                return;
-            }
-
-            setProjects(projects);
-        });
+        setTimeout(() => {
+            reloadProjectList();
+        }, 1000);
     }, []);
 
     return (
@@ -184,7 +202,7 @@ const ProjectsSelect = () => {
                 </div>
             </InkModal>
 
-            <Navigation className="z-0" />
+            <TopNavigation className="z-0" />
 
             <div className="relative z-20 bg-ink-transparent pt-[15vh] h-full w-[60%] mx-auto">
                 <h1 className="z-20 mix-blend-difference text-ink-light-grey font-ink-catamaran text-xl">
@@ -202,7 +220,7 @@ const ProjectsSelect = () => {
                     >
                         <img
                             className="mb-4"
-                            src="icons/plus.svg"
+                            src="/icons/plus.svg"
                             alt="Add project"
                         />
                         <h1 className="text-ink-white font-ink-catamaran text-2xl font-semibold">
@@ -220,7 +238,7 @@ const ProjectsSelect = () => {
                     >
                         <img
                             className="mb-4"
-                            src="icons/plus.svg"
+                            src="/icons/plus.svg"
                             alt="Add project"
                         />
                         <h1 className="text-ink-white font-ink-catamaran text-2xl font-semibold">
@@ -248,6 +266,19 @@ const ProjectsSelect = () => {
                             )
                         )}
                 </div>
+
+                {projects === null && (
+                    <div className="w-full mt-20 flex justify-center items-center">
+                        <InkButton
+                            onClick={() => {
+                                navigate(0);
+                            }}
+                            lightTheme={false}
+                        >
+                            Refresh project list
+                        </InkButton>
+                    </div>
+                )}
             </div>
         </div>
     );

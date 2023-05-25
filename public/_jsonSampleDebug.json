@@ -1,7 +1,10 @@
 {
     "name": "The Local Project",
     "description": "some text I wrote locally on my machine",
-    "createdAt": "2018-03-06T16:23:13Z",
+    "createdAt": {
+        "nanoseconds": 1684947.374686,
+        "seconds": 1684947374.686
+    },
     "tables": [
         {
             "id": 1,

@@ -1,4 +1,5 @@
 import { atom } from "recoil";
+import { recoilPersist } from "recoil-persist";
 
 /*
 PROJECT: uid: string - name
@@ -58,18 +59,27 @@ MODIFICATION_OPERATOR:
     INCREMENT
 */
 
+const { persistAtom } = recoilPersist({
+    key: "projectState",
+    storage: localStorage,
+});
+
 const projectState = atom({
     key: "projectState",
     default: {
-        uid: "",
-        local: true,
+        uid: "local",
+        local: false,
 
         name: "",
         description: "",
-        createdAt: "",
+        createdAt: {
+            nanoseconds: 0,
+            seconds: 0,
+        },
         members: [],
         tables: [],
     },
+    effects_UNSTABLE: [persistAtom],
 });
 
 export default projectState;

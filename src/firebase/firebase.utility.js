@@ -9,6 +9,7 @@ import {
     doc,
     getDoc,
     getFirestore,
+    onSnapshot,
     setDoc,
     updateDoc,
 } from "firebase/firestore";
@@ -49,7 +50,13 @@ export const signInWithGoogle = async () => {
             photoURL: user.photoURL || `https://robohash.org/${user.uid}.png`,
         });
 
-        return { succeded: true, user: userData };
+        return {
+            succeded: true,
+            user: {
+                uid: user.uid,
+                ...userData,
+            },
+        };
     } catch (error) {
         return {
             succeded: false,
@@ -76,7 +83,10 @@ export const signInWithEmailAndPassword = async (email, password) => {
             ).data();
             return {
                 succeded: true,
-                user: userData,
+                user: {
+                    uid: user.uid,
+                    ...userData,
+                },
             };
         } catch (error) {
             return {
@@ -127,6 +137,18 @@ export const signUpWithEmailAndPassword = async (
     }
 };
 
+export const signOut = async () => {
+    try {
+        await auth.signOut();
+        return { succeded: true };
+    } catch (error) {
+        return {
+            succeded: false,
+            errorCode: "Error signing out. Please try again!",
+        };
+    }
+};
+
 // Firestore DB
 const db = getFirestore(app);
 
@@ -171,10 +193,23 @@ const addUserToDatabase = async (authObject, otherProps) => {
             throw "Error adding user to the database. Please try again!";
         }
     } else {
-        console.log("User already exists in the database.");
+        console.log("NOT ERROR: User already exists in the database.");
     }
 
     return (await getDoc(userRef)).data();
+};
+
+export const convertFirebaseProjectToProjectState = (project, projectUID) => {
+    const { name, description, createdAt, members } = project;
+    return {
+        uid: projectUID,
+        local: false,
+        name,
+        description,
+        createdAt,
+        members,
+        tables: [],
+    };
 };
 
 export const getUserProjects = async (userUID) => {
@@ -232,4 +267,15 @@ export const createProject = async (userUID, name, description) => {
                 "Error creating project. Please try again or contact support.",
         };
     }
+};
+
+export const subscribeToProject = async (projectUID, onChange) => {
+    const projectRef = doc(db, `projects/${projectUID}`);
+    const unsub = onSnapshot(projectRef, (doc) => {
+        const data = doc.data();
+
+        onChange(data);
+    });
+
+    return unsub;
 };

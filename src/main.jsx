@@ -8,6 +8,8 @@ import SignUp from "./pages/sign-up/sign-up.page";
 import ProjectDashboard from "./pages/project-dashboard/project-dashboard.page";
 import ProjectsSelect from "./pages/projects-select/projects-select.page";
 import { RecoilRoot } from "recoil";
+import ProjectTableView from "./pages/views/tables/project-table-view.page";
+import PageNotFound from "./pages/page-not-found/page-not-found.page";
 
 const paths = [
     { path: "/", element: <Home /> },
@@ -15,6 +17,8 @@ const paths = [
     { path: "/sign-up", element: <SignUp /> },
     { path: "/projects", element: <ProjectsSelect /> },
     { path: "/project/:projectId", element: <ProjectDashboard /> },
+    { path: "/project/:projectId/views/tables", element: <ProjectTableView /> },
+    { path: "*", element: <PageNotFound /> },
 ];
 
 const router = createBrowserRouter(paths);

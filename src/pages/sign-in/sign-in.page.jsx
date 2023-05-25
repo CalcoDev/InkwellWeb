@@ -49,7 +49,15 @@ const SignIn = () => {
 
     useEffect(() => {
         if (signedIn) {
-            setGlobalUserState(signedIn);
+            console.log({
+                connected: true,
+                ...signedIn,
+            });
+
+            setGlobalUserState({
+                connected: true,
+                ...signedIn,
+            });
             navigate("/projects");
         }
     }, [signedIn, navigate]);

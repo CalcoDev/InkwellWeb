@@ -21,7 +21,6 @@ const jsonFromFile = async (file) => {
 export const loadProjectFromFile = async (file) => {
     try {
         const json = await jsonFromFile(file);
-        console.log(json);
 
         const [isValid, errorMessage] = checkProjectValidity(json);
 

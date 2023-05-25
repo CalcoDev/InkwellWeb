@@ -15,6 +15,8 @@ export default {
 
                 "ink-red": "#E53838",
 
+                "ink-light-orange": "#FAD0B1",
+
                 "ink-transparent": "transparent",
             },
             fontFamily: {
