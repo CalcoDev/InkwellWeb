@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import InkButton from "../../components/ink-button/ink-button.component";
 
+// TODO(calco): Modify this page to be more user friendly
 const PageNotFound = () => {
     const navigate = useNavigate();
 
