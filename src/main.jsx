@@ -25,7 +25,9 @@ const paths = [
     { path: "*", element: <PageNotFound /> },
 ];
 
-const router = createBrowserRouter(paths);
+const router = createBrowserRouter(paths, {
+    basename: "/InkwellWeb",
+});
 ReactDOM.createRoot(document.getElementById("root")).render(
     <>
         <RecoilRoot>
