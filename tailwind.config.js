@@ -18,6 +18,11 @@ export default {
                 "ink-light-orange": "#FAD0B1",
 
                 "ink-transparent": "transparent",
+
+                "ink-tables-mid-grey": "#1F1F1F",
+                "ink-tables-dark-grey": "#151515",
+                "ink-tables-light-grey": "#707070",
+                "ink-tables-lightest-grey": "#B7B7B7",
             },
             fontFamily: {
                 "ink-libre": "Libre Baskerville, serif",

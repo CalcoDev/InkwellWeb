@@ -10,6 +10,8 @@ import ProjectsSelect from "./pages/projects-select/projects-select.page";
 import { RecoilRoot } from "recoil";
 import ProjectTableView from "./pages/views/tables/project-table-view.page";
 import PageNotFound from "./pages/page-not-found/page-not-found.page";
+import ProjectSettings from "./pages/project-settings/project-settings.page";
+import ProjectUserManagement from "./pages/project-user-management/project-user-management.page";
 
 const paths = [
     { path: "/", element: <Home /> },
@@ -17,6 +19,8 @@ const paths = [
     { path: "/sign-up", element: <SignUp /> },
     { path: "/projects", element: <ProjectsSelect /> },
     { path: "/project/:projectId", element: <ProjectDashboard /> },
+    { path: "/project/:projectId/settings", element: <ProjectSettings /> },
+    { path: "/project/:projectId/users", element: <ProjectUserManagement /> },
     { path: "/project/:projectId/views/tables", element: <ProjectTableView /> },
     { path: "*", element: <PageNotFound /> },
 ];

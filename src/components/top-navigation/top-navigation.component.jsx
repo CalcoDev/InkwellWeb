@@ -7,9 +7,14 @@ import InkModal from "../ink-modal/ink-modal.component";
 import InkButton from "../ink-button/ink-button.component";
 import { useState } from "react";
 import { signOut } from "../../firebase/firebase.utility";
+import projectState, {
+    defaultProjectState,
+} from "../../recoil/atoms/project-state.atom";
 
 const TopNavigation = ({ className }) => {
     const [_, setGlobalUser] = useRecoilState(userState);
+    const [__, setGlobalProjectState] = useRecoilState(projectState);
+
     const [hideModal, setHideModal] = useState(true);
     const [{ photoURL }] = useRecoilState(userState);
 
@@ -26,6 +31,7 @@ const TopNavigation = ({ className }) => {
 
         setHideModal(true);
         setGlobalUser(defaultUserState);
+        setGlobalProjectState(defaultProjectState);
         navigate("/");
     };
 

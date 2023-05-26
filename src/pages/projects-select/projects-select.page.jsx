@@ -81,25 +81,25 @@ const ProjectsSelect = () => {
             ...projects[projectIdx],
         });
 
+        console.log("Aaaaaaa");
+        console.log(projects);
+        console.log(projects[projectIdx]);
+
         // TODO(calco): PRODUCTION UNCOMMENT
         navigate(`/project/${projects[projectIdx].uid}`);
     };
 
     const reloadProjectList = () => {
-        setTimeout(() => {
-            getUserProjects(user.uid).then(
-                ({ succeded, errorCode, projects }) => {
-                    console.log(succeded, errorCode, projects);
+        getUserProjects(user.uid).then(({ succeded, errorCode, projects }) => {
+            console.log(succeded, errorCode, projects);
 
-                    if (!succeded) {
-                        setErrorCode(errorCode);
-                        return;
-                    }
+            if (!succeded) {
+                setErrorCode(errorCode);
+                return;
+            }
 
-                    setProjects(projects);
-                }
-            );
-        }, 2000);
+            setProjects(projects);
+        });
     };
 
     useEffect(() => {
@@ -107,9 +107,7 @@ const ProjectsSelect = () => {
             navigate("/sign-in");
         }
 
-        setTimeout(() => {
-            reloadProjectList();
-        }, 1000);
+        reloadProjectList();
     }, []);
 
     return (

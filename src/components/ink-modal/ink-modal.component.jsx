@@ -15,7 +15,7 @@ const InkModal = ({
             `}
         >
             <div
-                className={`${className} w-2/3 h-2/3 p-8 bg-ink-white rounded-md shadow-2xl flex flex-col`}
+                className={`${className} w-2/3 h-2/3 p-8 bg-ink-white rounded-md shadow-2xl flex flex-col overflow-scroll`}
             >
                 <div className="flex justify-between">
                     <h1 className="text-ink-dark-grey font-ink-catamaran text-2xl font-semibold">

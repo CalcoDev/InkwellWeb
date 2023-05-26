@@ -62,6 +62,33 @@ const checkTableValidity = (table) => {
     return [true];
 };
 
+export const checkEntryValidity = (entryType, entryData, extraBool) => {
+    if (extraBool)
+        return [true, "This is a temporary fix for a bug that I can't find."];
+
+    const res = checkEntryTypeValidity(entryType);
+    if (!res.succeded) return [false, res.errorCode];
+
+    if (entryType === "fact") return checkFactValidity(entryData);
+    if (entryType === "event") return checkEventValidity(entryData);
+    if (entryType === "rule") return checkRuleValidity(entryData);
+
+    return [false, "How tf did we get here?"];
+};
+
+export const checkEntryTypeValidity = (entryType) => {
+    if (entryType !== "fact" && entryType !== "event" && entryType !== "rule") {
+        return {
+            succeded: false,
+            errorCode: "Invalid entry type.",
+        };
+    }
+
+    return {
+        succeded: true,
+    };
+};
+
 const checkFactValidity = (fact) => {
     const hasId = fact.hasOwnProperty("id");
     const hasKey = fact.hasOwnProperty("key");

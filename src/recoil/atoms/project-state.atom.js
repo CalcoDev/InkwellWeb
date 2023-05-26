@@ -64,21 +64,23 @@ const { persistAtom } = recoilPersist({
     storage: localStorage,
 });
 
+export const defaultProjectState = {
+    uid: "local",
+    local: false,
+
+    name: "",
+    description: "",
+    createdAt: {
+        nanoseconds: 0,
+        seconds: 0,
+    },
+    members: [],
+    tables: [],
+};
+
 const projectState = atom({
     key: "projectState",
-    default: {
-        uid: "local",
-        local: false,
-
-        name: "",
-        description: "",
-        createdAt: {
-            nanoseconds: 0,
-            seconds: 0,
-        },
-        members: [],
-        tables: [],
-    },
+    default: defaultProjectState,
     effects_UNSTABLE: [persistAtom],
 });
 
